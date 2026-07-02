@@ -55,7 +55,100 @@ const menuCategories = [
     }
 ];
 
-export default function LeftSidebar({ activeId, onSelect }) {
+export default function LeftSidebar({ activeId, onSelect, isMobile = false, isOpen = false }) {
+    // Mobile sidebar
+    if (isMobile) {
+        return (
+            <aside
+                id="left-sidebar"
+                className={`fixed left-0 top-0 bottom-[54px] z-[60] flex flex-col transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+                style={{
+                    width: '260px',
+                    background: 'var(--left-sidebar-bg)',
+                    borderRadius: '0 24px 24px 0',
+                }}
+            >
+                {/* Brand Logo Header */}
+                <div className="flex items-center gap-4 w-full h-[64px] flex-shrink-0" style={{ paddingLeft: '24px' }}>
+                    <div className="flex-shrink-0 flex items-center justify-center w-[24px] h-[24px]">
+                        <img src={logo} alt="Linear Admin Logo" className="w-[20px] h-[20px] object-contain" />
+                    </div>
+                    <div className="flex items-center whitespace-nowrap font-bold text-[18px] tracking-tight select-none">
+                        <span style={{ color: 'var(--left-sidebar-brand)' }}>Linear</span>
+                        <span style={{ color: 'var(--left-sidebar-active)', marginLeft: '5px' }}>Admin</span>
+                    </div>
+                </div>
+
+                {/* Menu Categories List */}
+                <div className="flex-1 overflow-y-auto overflow-x-hidden pt-2 pb-[32px] space-y-1 scrollbar-custom">
+                    {menuCategories.map((category) => (
+                        <div key={category.title} className="w-full">
+                            {/* Category Title */}
+                            <div className="w-full select-none" style={{ marginTop: '28px', marginBottom: '16px', paddingLeft: '24px' }}>
+                                <div className="text-[12px] font-semibold tracking-wider text-[var(--text-muted)] whitespace-nowrap">
+                                    {category.title}
+                                </div>
+                            </div>
+
+                            {/* Category Items */}
+                            <div className="flex flex-col">
+                                {category.items.map((item) => {
+                                    const { Icon } = item;
+                                    const isActive = activeId === item.id;
+                                    return (
+                                        <button
+                                            key={item.id}
+                                            id={`left-icon-${item.id}`}
+                                            onClick={() => onSelect({ id: item.id, label: item.label })}
+                                            className="sidebar-menu-item relative flex items-center gap-[10px] w-[calc(100%_-_32px)] mx-4 h-[44px] rounded-[22px] transition-all duration-200 cursor-pointer group/item"
+                                            style={{
+                                                paddingLeft: '24px',
+                                                color: isActive ? 'var(--left-sidebar-active)' : 'var(--left-sidebar-item-text)',
+                                            }}
+                                        >
+                                            {/* Icon */}
+                                            <div className="flex-shrink-0 flex items-center justify-center w-[20px] h-[20px]">
+                                                <Icon
+                                                    size={18}
+                                                    strokeWidth={isActive ? 2.5 : 2}
+                                                    className="transition-all duration-200 group-hover/item:scale-105 group-hover/item:text-[var(--left-sidebar-hover-text)]"
+                                                />
+                                            </div>
+
+                                            {/* Label - always visible on mobile */}
+                                            <span
+                                                className="text-[13px] font-semibold whitespace-nowrap"
+                                                style={{
+                                                    color: isActive ? 'var(--left-sidebar-active-label)' : 'var(--left-sidebar-item-label)',
+                                                }}
+                                            >
+                                                {item.label}
+                                            </span>
+
+                                            {/* Chevron Arrow */}
+                                            {item.hasSubmenu && (
+                                                <ChevronRight
+                                                    size={13}
+                                                    className="absolute font-semibold right-[16px]"
+                                                    style={{
+                                                        color: isActive ? 'var(--left-sidebar-active-label)' : 'var(--left-sidebar-item-text)',
+                                                    }}
+                                                />
+                                            )}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    ))}
+                    {/* Scroll spacer at the very bottom */}
+                    <div className="h-[40px] w-full flex-shrink-0" />
+                </div>
+            </aside>
+        );
+    }
+
+    // Desktop sidebar
     return (
         <aside
             id="left-sidebar"

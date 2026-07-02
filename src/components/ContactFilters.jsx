@@ -1,19 +1,17 @@
 import { useState } from 'react';
 import { filterSections } from '../data/contactData';
 
-export default function ContactFilters() {
+export default function ContactFilters({ isMobile = false, isOpen = false }) {
   const [activeFilter, setActiveFilter] = useState('all');
   const [hoveredId, setHoveredId] = useState(null);
 
-  return (
-    <section className="flex h-full min-h-0 min-w-0 flex-col p-6">
+  const content = (
+    <section className={`flex h-full min-h-0 min-w-0 flex-col ${!isMobile ? 'p-6' : ''}`}
+      style={isMobile ? { padding: "12px" } : {}}
+    >
       {/* First Section Title stays fixed at the top */}
       <div className="mb-[10px] px-[8px]">
-        <p className="text-[12px] font-medium text-[var(--text-muted)]"
-          style={{
-            marginBottom: '5px'
-          }}
-        >
+        <p className="text-[12px] font-medium text-[var(--text-muted)]">
           {filterSections[0].title}
         </p>
       </div>
@@ -33,8 +31,8 @@ export default function ContactFilters() {
                 onMouseLeave={() => setHoveredId(null)}
                 className="flex h-[36px] w-full items-center gap-[12px] rounded-[6px] px-[10px] text-left transition-colors duration-200"
                 style={{
-                  background: isActive 
-                    ? 'var(--filter-btn-active-bg)' 
+                  background: isActive
+                    ? 'var(--filter-btn-active-bg)'
                     : (hoveredId === item.id ? 'var(--filter-btn-hover-bg)' : 'transparent'),
                   color: 'var(--filter-btn-text)',
                   padding: '8px 10px',
@@ -73,8 +71,8 @@ export default function ContactFilters() {
                     onMouseLeave={() => setHoveredId(null)}
                     className="flex h-[36px] w-full items-center gap-[12px] rounded-[6px] px-[10px] text-left transition-colors duration-200"
                     style={{
-                      background: isActive 
-                        ? 'var(--filter-btn-active-bg)' 
+                      background: isActive
+                        ? 'var(--filter-btn-active-bg)'
                         : (hoveredId === item.id ? 'var(--filter-btn-hover-bg)' : 'transparent'),
                       color: 'var(--filter-btn-text)',
                       padding: '8px 10px',
@@ -93,4 +91,25 @@ export default function ContactFilters() {
       </div>
     </section>
   );
+
+  if (isMobile) {
+    return (
+      <aside
+        className={`fixed left-0 top-0 bottom-[54px] z-[60] flex flex-col transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        style={{
+          width: '280px',
+          background: 'var(--search-bg)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          borderRight: '1px solid var(--search-border)',
+          borderRadius: '0 24px 24px 0',
+          boxShadow: isOpen ? '10px 0 30px rgba(0, 0, 0, 0.1)' : 'none',
+        }}
+      >
+        {content}
+      </aside>
+    );
+  }
+
+  return content;
 }

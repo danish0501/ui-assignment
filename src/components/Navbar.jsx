@@ -8,9 +8,66 @@ import {
   X,
 } from 'lucide-react';
 
-export default function Navbar({ title }) {
+export default function Navbar({ title, isMobile = false }) {
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Mobile navbar
+  if (isMobile) {
+    return (
+      <nav
+        id="navbar"
+        className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between"
+        style={{
+          height: '64px',
+          padding: '0 16px',
+          background: 'var(--sidebar-navbar-bg)',
+        }}
+      >
+        {/* Left: Title */}
+        <h1
+          className="font-semibold"
+          style={{
+            fontSize: '14px',
+            color: 'var(--text-nav-title)',
+            letterSpacing: '-0.01em',
+          }}
+        >
+          {title}
+        </h1>
+
+        {/* Right: Emoji + Create */}
+        <div className="flex items-center gap-[10px]">
+          <button
+            id="navbar-emoji-mobile"
+            className="flex items-center justify-center rounded-[10px] text-[var(--navbar-btn-text)] hover:bg-[var(--navbar-btn-hover-bg)] hover:text-[var(--navbar-btn-hover-text)] hover:shadow-[var(--navbar-btn-hover-shadow)] transition-all duration-300 cursor-pointer"
+            style={{ width: '36px', height: '36px' }}
+            title="Emoji"
+          >
+            <CircleEllipsis size={18} strokeWidth={2.25} />
+          </button>
+
+          <button
+            id="navbar-create-contact-mobile"
+            className="flex items-center justify-center gap-2 rounded-full cursor-pointer transition-all duration-300 hover:bg-[var(--create-btn-hover-bg)] relative"
+            style={{
+              height: '36px',
+              padding: '0 16px',
+              background: 'var(--create-btn-bg)',
+              border: '1px solid var(--create-btn-border)',
+              fontSize: '12px',
+              fontWeight: 500,
+              color: 'var(--create-btn-text)',
+            }}
+          >
+            <Plus size={16} strokeWidth={2} />
+            Create
+          </button>
+        </div>
+      </nav>
+    );
+  }
+
+  // Desktop navbar
   return (
     <nav
       id="navbar"

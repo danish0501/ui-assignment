@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import {
+  ArrowLeft,
   Clipboard,
   Edit3,
   Mail,
@@ -46,7 +47,7 @@ function DetailRow({ Icon, label, value, isNote = false }) {
   );
 }
 
-export default function ContactDetails({ contact }) {
+export default function ContactDetails({ contact, isMobile = false, onBack }) {
   const [hoveredButton, setHoveredButton] = useState(null);
   const detailRows = useMemo(
     () => [
@@ -67,41 +68,58 @@ export default function ContactDetails({ contact }) {
 
   return (
     <section className="flex h-full min-h-0 min-w-0 flex-col p-6">
-      <div className="mb-[30px] flex items-center justify-end gap-[20px]"
+      <div className="mb-[30px] flex items-center justify-between gap-[20px]"
         style={{
           marginBottom: '10px'
         }}
       >
-        <button
-          onMouseEnter={() => setHoveredButton('update')}
-          onMouseLeave={() => setHoveredButton(null)}
-          className="flex items-center gap-[7px] text-[14px] font-medium text-[var(--details-btn-text)]"
-          style={{
-            padding: '8px 16px',
-            borderRadius: '6px',
-            background: hoveredButton === 'update' ? 'var(--details-btn-hover-bg)' : 'transparent',
-            cursor: 'pointer',
-            transition: 'background-color 0.2s ease',
-          }}
-        >
-          <Edit3 size={15} strokeWidth={1.9} />
-          Update
-        </button>
-        <button
-          onMouseEnter={() => setHoveredButton('delete')}
-          onMouseLeave={() => setHoveredButton(null)}
-          className="flex items-center gap-[7px] text-[14px] font-medium text-[var(--details-btn-text)]"
-          style={{
-            padding: '8px 16px',
-            borderRadius: '6px',
-            background: hoveredButton === 'delete' ? 'var(--details-btn-hover-bg)' : 'transparent',
-            cursor: 'pointer',
-            transition: 'background-color 0.2s ease',
-          }}
-        >
-          <MinusCircle size={15} strokeWidth={1.9} />
-          Delete
-        </button>
+        {/* Back button - only on mobile */}
+        {isMobile && onBack ? (
+          <button
+            onClick={onBack}
+            className="flex items-center justify-center cursor-pointer transition-all duration-200 hover:bg-[var(--details-btn-hover-bg)] rounded-[6px]"
+            style={{
+              padding: '8px',
+            }}
+          >
+            <ArrowLeft size={20} strokeWidth={2} color="var(--details-btn-text)" />
+          </button>
+        ) : (
+          <div />
+        )}
+
+        <div className="flex items-center gap-[20px]">
+          <button
+            onMouseEnter={() => setHoveredButton('update')}
+            onMouseLeave={() => setHoveredButton(null)}
+            className="flex items-center gap-[7px] text-[14px] font-medium text-[var(--details-btn-text)]"
+            style={{
+              padding: '8px 16px',
+              borderRadius: '6px',
+              background: hoveredButton === 'update' ? 'var(--details-btn-hover-bg)' : 'transparent',
+              cursor: 'pointer',
+              transition: 'background-color 0.2s ease',
+            }}
+          >
+            <Edit3 size={15} strokeWidth={1.9} />
+            Update
+          </button>
+          <button
+            onMouseEnter={() => setHoveredButton('delete')}
+            onMouseLeave={() => setHoveredButton(null)}
+            className="flex items-center gap-[7px] text-[14px] font-medium text-[var(--details-btn-text)]"
+            style={{
+              padding: '8px 16px',
+              borderRadius: '6px',
+              background: hoveredButton === 'delete' ? 'var(--details-btn-hover-bg)' : 'transparent',
+              cursor: 'pointer',
+              transition: 'background-color 0.2s ease',
+            }}
+          >
+            <MinusCircle size={15} strokeWidth={1.9} />
+            Delete
+          </button>
+        </div>
       </div>
 
       <div className="contact-workspace-scroll min-h-0 flex-1 overflow-y-auto pr-[10px]">

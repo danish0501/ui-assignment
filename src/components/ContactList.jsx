@@ -1,18 +1,34 @@
 import { useState } from 'react';
-import { SortAsc } from 'lucide-react';
+import { SortAsc, Menu } from 'lucide-react';
 import ContactAvatar from './ContactAvatar';
 
-export default function ContactList({ contacts, selectedId, onSelect }) {
+export default function ContactList({ contacts, selectedId, onSelect, isMobile = false, onMenuClick }) {
   const [hoveredId, setHoveredId] = useState(null);
 
   return (
     <section className="flex h-full min-h-0 min-w-0 flex-col p-6">
-      <div className="mb-[14px] flex h-[22px] items-center justify-between px-[2px]">
-        <h2 className="text-[14px] font-medium text-[var(--contact-item-title)]"
-          style={{
-            marginBottom: '20px'
-          }}
-        >All Contacts</h2>
+      <div 
+        className="mb-[14px] flex h-[22px] items-center justify-between px-[2px]"
+        style={{ marginTop: isMobile ? '12px' : '0' }}
+      >
+        {isMobile ? (
+          <div className="flex items-center gap-[12px]">
+            <button onClick={onMenuClick} className="cursor-pointer flex items-center justify-center hover:opacity-80 transition-opacity" title="Menu">
+              <Menu size={20} strokeWidth={2} color="var(--contact-item-title)" style={{ marginBottom: '20px' }} />
+            </button>
+            <h2 className="text-[14px] font-medium text-[var(--contact-item-title)]"
+              style={{
+                marginBottom: '20px'
+              }}
+            >All Contacts</h2>
+          </div>
+        ) : (
+          <h2 className="text-[14px] font-medium text-[var(--contact-item-title)]"
+            style={{
+              marginBottom: '20px'
+            }}
+          >All Contacts</h2>
+        )}
         <button
           className="flex h-[24px] w-[24px] items-center justify-center rounded-full transition-colors hover:bg-white/35"
           title="Sort contacts"
